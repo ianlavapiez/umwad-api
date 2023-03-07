@@ -1,15 +1,18 @@
-import { Router, Response, Request } from 'express';
-import Todo from './todos.model';
+import { Router } from 'express';
+
+import { validateRequest } from '../../middlewares';
+import * as TodoHandlers from './todos.handlers';
+import { Todo } from './todos.model';
 
 const router = Router();
 
-router.get('/', (req: Request, res: Response<Todo[]>) => {
-  res.json([
-    {
-      content: 'Learn TypeScript',
-      done: false,
-    },
-  ]);
-});
+router.get('/', TodoHandlers.findAll);
+router.post(
+  '/',
+  validateRequest({
+    body: Todo,
+  }),
+  TodoHandlers.createOne,
+);
 
 export default router;
