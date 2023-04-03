@@ -4,10 +4,22 @@ import { ZodError } from 'zod';
 import ErrorResponse from './interfaces/ErrorResponse';
 import RequestValidators from './interfaces/RequestValidators';
 
-export function notFound(req: Request, res: Response, next: NextFunction) {
-  res.status(404);
-  const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
-  next(error);
+export function checkedLoggedIn(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const isLoggedIn = req.isAuthenticated() && req.user;
+  console.log(req.user);
+  console.log(req.isAuthenticated());
+
+  if (!isLoggedIn) {
+    return res.status(401).json({
+      error: 'Unauthorized. Please login first.',
+    });
+  }
+
+  next();
 }
 
 export function errorHandler(
@@ -23,6 +35,12 @@ export function errorHandler(
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,
   });
+}
+
+export function notFound(req: Request, res: Response, next: NextFunction) {
+  res.status(404);
+  const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
+  next(error);
 }
 
 export function validateRequest(validators: RequestValidators) {
