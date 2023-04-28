@@ -8,7 +8,7 @@ import { db } from '../../db';
 export const Partner = z.object({
   userId: z.string().min(1),
   name: z.string().min(1).optional(),
-  link: z.string().min(1).optional(),
+  link: z.string().url().min(1).optional(),
 });
 export type Partner = z.infer<typeof Partner>;
 export type PartnerWithId = WithId<Partner>;

@@ -10,7 +10,7 @@ export const Program = z.object({
   description: z.string().min(1).optional(),
   slug: z.string().min(1).optional(),
   datePosted: z.date().optional().default(new Date()),
-  link: z.string().min(1).optional(),
+  link: z.string().url().min(1).optional(),
 });
 export type Program = z.infer<typeof Program>;
 export type ProgramWithId = WithId<Program>;
